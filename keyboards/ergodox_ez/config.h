@@ -109,13 +109,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define DRIVER_2_LED_TOTAL 24
 #define DRIVER_LED_TOTAL (DRIVER_1_LED_TOTAL + DRIVER_2_LED_TOTAL)
 
-// #define RGBLIGHT_COLOR_LAYER_0 0x00, 0x00, 0xFF
-/* #define RGBLIGHT_COLOR_LAYER_1 0x00, 0x00, 0xFF */
-/* #define RGBLIGHT_COLOR_LAYER_2 0xFF, 0x00, 0x00 */
+//#define RGBLIGHT_COLOR_LAYER_0 0x00, 0x00, 0xFF
+#define RGBLIGHT_COLOR_LAYER_0 0x00, 0x00, 0x00
+#define RGBLIGHT_COLOR_LAYER_1 0x00, 0x00, 0xFF
+#define RGBLIGHT_COLOR_LAYER_2 0x96, 0x51, 0x2F
 /* #define RGBLIGHT_COLOR_LAYER_3 0x00, 0xFF, 0x00 */
 /* #define RGBLIGHT_COLOR_LAYER_4 0xFF, 0xFF, 0x00 */
-/* #define RGBLIGHT_COLOR_LAYER_5 0x00, 0xFF, 0xFF */
-/* #define RGBLIGHT_COLOR_LAYER_6 0xFF, 0x00, 0xFF */
+#define RGBLIGHT_COLOR_LAYER_5 0x00, 0xFF, 0xFF
+//#define RGBLIGHT_COLOR_LAYER_6 0xFF, 0x00, 0xFF
 /* #define RGBLIGHT_COLOR_LAYER_7 0xFF, 0xFF, 0xFF */
 
 /*
