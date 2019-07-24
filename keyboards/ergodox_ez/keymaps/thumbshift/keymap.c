@@ -461,39 +461,120 @@ void turn_off_japanese_mode(void) {
 
 
 
+// bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+//   switch (keycode) {
+//     case EPRM:
+//       if (record->event.pressed) {
+//         eeconfig_init();
+//       }
+//       return false;
+//     case RGB_SLD:
+//       if (record->event.pressed) {
+//         rgblight_mode(1);
+//       }
+//       return false;
+//     case HSV_172_255_255:
+//       if (record->event.pressed) {
+//         rgblight_mode(1);
+//         rgblight_sethsv(172,255,255);
+//       }
+//       return false;
+//     case HSV_86_255_128:
+//       if (record->event.pressed) {
+//         rgblight_mode(1);
+//         rgblight_sethsv(86,255,128);
+//       }
+//       return false;
+//     case HSV_27_255_255:
+//       if (record->event.pressed) {
+//         rgblight_mode(1);
+//         rgblight_sethsv(27,255,255);
+//       }
+//       return false;
+//   }
+//   return true;
+// }
+//
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+
+    if (is_modifier(keycode)){
+        if (record->event.pressed){
+            processing_modifier = true;
+        }else{
+            processing_modifier = false;
+        }
+        return true;
+    }else if(processing_modifier){
+        return true;
+    }
+
   switch (keycode) {
+    // dynamically generate these.
     case EPRM:
       if (record->event.pressed) {
         eeconfig_init();
       }
       return false;
+      break;
+    case VRSN:
+      if (record->event.pressed) {
+        SEND_STRING (QMK_KEYBOARD "/" QMK_KEYMAP " @ " QMK_VERSION);
+      }
+      return false;
+      break;
     case RGB_SLD:
       if (record->event.pressed) {
-        rgblight_mode(1);
+        #ifdef RGBLIGHT_ENABLE
+          rgblight_mode(1);
+        #endif
       }
       return false;
-    case HSV_172_255_255:
+      break;
+    case KC_HENK:
+      if (record->event.pressed && biton32(layer_state) == BASE) {
+          if (is_japanese_mode) {
+            turn_off_japanese_mode();
+          }else{
+            turn_on_japanese_mode();
+          }
+      }
+      return false;
+      break;
+  }
+
+  if (is_japanese_mode) {
       if (record->event.pressed) {
-        rgblight_mode(1);
-        rgblight_sethsv(172,255,255);
+          switch (keycode) {
+              case L_T_SFT:
+                  processing_left_t = true;
+                  break;
+              case R_T_SFT:
+                  processing_right_t = true;
+                  break;
+              default:
+                  processing_keycode = keycode;
+                  break;
+          }
+          return false;
+      }else{
+          bool l = processing_left_t;
+          bool r = processing_right_t;
+          uint16_t c = processing_keycode;
+          processing_left_t = false;
+          processing_right_t = false;
+          processing_keycode = KC_NO;
+          return send_key_sequence(l, r, c);
       }
-      return false;
-    case HSV_86_255_128:
-      if (record->event.pressed) {
-        rgblight_mode(1);
-        rgblight_sethsv(86,255,128);
-      }
-      return false;
-    case HSV_27_255_255:
-      if (record->event.pressed) {
-        rgblight_mode(1);
-        rgblight_sethsv(27,255,255);
-      }
-      return false;
   }
   return true;
 }
+
+
+
+
+
+
 
 uint32_t layer_state_set_user(uint32_t state) {
 
