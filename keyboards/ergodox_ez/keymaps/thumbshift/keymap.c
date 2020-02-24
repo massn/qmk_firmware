@@ -114,7 +114,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        KC_TRNS,KC_HASH,KC_DLR, KC_LPRN,KC_RPRN,KC_GRV,
        KC_TRNS,KC_PERC,KC_CIRC,KC_LBRC,KC_RBRC,KC_TILD,KC_TRNS,
           EPRM,KC_TRNS,KC_TRNS,KC_TRNS,KC_TRNS,
-                                       RGB_MOD,KC_TRNS,
+                                       RGB_MOD,HSV_172_255_255,
                                                KC_TRNS,
                                RGB_VAD,RGB_VAI,KC_TRNS,
        // right hand
@@ -135,7 +135,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 // KC_TRANS,       KC_HASH,  KC_DLR,     KC_LPRN,     KC_RPRN,     KC_GRAVE,
 // KC_TRANS,       KC_PERC,  KC_CIRC,    KC_LBRACKET, KC_RBRACKET, KC_TILD,　       KC_TRANS,
 // KC_TRANS,       KC_TRANS, KC_TRANS,   KC_TRANS,    KC_TRANS,
-//                                                    RGB_MOD,     HSV_172_255_255, 
+//                                                    RGB_MOD,     HSV_172_255_255,
 //                                                                 HSV_86_255_128,RGB_VAD,
 //                                       RGB_VAI,     HSV_27_255_255,KC_TRANSPARENT,
 //
@@ -440,10 +440,12 @@ void turn_on_japanese_mode(void) {
     SEND_STRING(SS_TAP(X_RGUI));
     SEND_STRING(SS_TAP(X_LANG1));
     is_japanese_mode = true;
-#ifdef RGBLIGHT_COLOR_LAYER_2
+    rgblight_mode(1);
+    rgblight_sethsv(172,255,255);
+//#ifdef RGBLIGHT_COLOR_LAYER_2
     // TODO
     //rgblight_setrgb(RGBLIGHT_COLOR_LAYER_2);
-#endif
+//#endif
   }
 }
 
@@ -452,6 +454,8 @@ void turn_off_japanese_mode(void) {
     SEND_STRING(SS_TAP(X_LGUI));
     SEND_STRING(SS_TAP(X_LANG2));
     is_japanese_mode = false;
+    rgblight_mode(1);
+    rgblight_sethsv(172,5,5);
 #ifdef RGBLIGHT_COLOR_LAYER_0
     // TODO
     // rgblight_setrgb(RGBLIGHT_COLOR_LAYER_0);
@@ -535,8 +539,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
       if (record->event.pressed && biton32(layer_state) == BASE) {
           if (is_japanese_mode) {
             turn_off_japanese_mode();
+            rgblight_mode(1);
+      rgblight_sethsv(172,255,255);
           }else{
             turn_on_japanese_mode();
+            rgblight_mode(1);
+      rgblight_sethsv(27,255,255);
           }
       }
       return false;
@@ -572,10 +580,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
 
 
 
-
-
-
-
 uint32_t layer_state_set_user(uint32_t state) {
 
   uint8_t layer = biton32(state);
@@ -589,7 +593,22 @@ uint32_t layer_state_set_user(uint32_t state) {
       ergodox_right_led_1_on();
       break;
     case 2:
-      ergodox_right_led_2_on();
+      rgblight_mode(1);
+      rgblight_sethsv(172,255,255);
+//       return false;
+//     case HSV_86_255_128:
+//       if (record->event.pressed) {
+//         rgblight_mode(1);
+//         rgblight_sethsv(86,255,128);
+//       }
+//       return false;
+//     case HSV_27_255_255:
+//       if (record->event.pressed) {
+//         rgblight_mode(1);
+//         rgblight_sethsv(27,255,255);
+
+
+      //ergodox_right_led_2_on();
       break;
     case 3:
       ergodox_right_led_3_on();
